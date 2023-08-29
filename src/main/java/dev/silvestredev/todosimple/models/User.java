@@ -1,7 +1,7 @@
 package dev.silvestredev.todosimple.models;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -30,17 +30,18 @@ public class User {
     private Long id;
 
     @Column(length = 100, nullable = false, unique = true) //tamanho max = 100, não aceita nulo, é único
-    @NotBlank(groups = CreateUser.class) //não pode ser nulo e vazio
-    @Size(groups = CreateUser.class, min = 5, max = 100)
+    @NotBlank(groups = {CreateUser.class, UpdateUser.class}) //não pode ser nulo e vazio
+    @Size(groups = {CreateUser.class, UpdateUser.class}, min = 5, max = 100)
     private String name;
 
     @JsonProperty(access = Access.WRITE_ONLY) //não retornar a senha
     @Column(length = 30, nullable = false) //tamanho max = 30, não aceita nulo, é único
-    @NotBlank(groups = CreateUser.class) //não pode ser nulo e vazio
+    @NotBlank(groups = {CreateUser.class, UpdateUser.class}) //não pode ser nulo e vazio
     @Size(groups = {CreateUser.class, UpdateUser.class}, min = 6, max = 30)
     private String password;
 
-    // private List<Task> tasks = new ArrayList<Task>();
+    @Column(name = "tasks")
+    private List<Task> tasks = new ArrayList<Task>();
 
     // constructors
     public User() {
@@ -70,39 +71,5 @@ public class User {
     }
     public void setPassword(String password){
         this.password = password;
-    }
-
-    // hashequals
-    @Override
-    public boolean equals(Object obj){
-        if (obj == this) {
-            return true;
-        }
-
-        if (!(obj instanceof User)){
-            return false;
-        }
-
-        User other = (User) obj;
-        
-        if (other.id != null) {
-            return false;
-        }
-        else if (!this.id.equals(other.id)){
-            return false;
-        }
-
-        return Objects.equals(this.id, other.id) && Objects.equals(this.name, other.name) && Objects.equals(this.password, other.password);
-
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-
-        result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
-
-        return result;
     }
 }
