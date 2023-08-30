@@ -30,7 +30,7 @@ public class UserService {
     }
 
     //criação de usuário
-    @Transactional //sempre que houver um INSERT no db, usar essa annotation
+    @Transactional //sempre que o método for uma transação única (ou dá certo ou é tudo revertido), usar essa annotation para otimização
     public User createUser(User user) {
         
         try {
@@ -40,6 +40,7 @@ public class UserService {
             return userCreate;
         } 
         catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("Não foi possível criar esse usuário, tente novamente mais tarde.");
         }
     }
@@ -57,6 +58,7 @@ public class UserService {
             userRepository.delete(user);
         } 
         catch(Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("Não foi possível deletar esse usuário.");
         }
     }
@@ -79,6 +81,7 @@ public class UserService {
             userRepository.save(user);
         } 
         catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("Não foi possível atualizar a senha, tente novamente mais tarde.");
         }
     }

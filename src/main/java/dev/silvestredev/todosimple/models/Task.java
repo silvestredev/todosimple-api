@@ -67,6 +67,10 @@ public class Task {
         this.description = description;
     }
 
+    public User getUser() {
+        return this.user;
+    }
+
     //hash and equals
     @Override
     public boolean equals(Object o) {
