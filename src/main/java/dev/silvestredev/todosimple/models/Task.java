@@ -1,5 +1,7 @@
 package dev.silvestredev.todosimple.models;
 
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +18,6 @@ import jakarta.validation.constraints.Size;
 public class Task {
 
     private interface CreateTask {}
-    private interface UpdateTask {}
 
     public static final String TASK_NAME = "task";
 
@@ -64,5 +65,20 @@ public class Task {
     }
     public void setDescription(String description){
         this.description = description;
+    }
+
+    //hash and equals
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        
+        Task task = (Task) o;
+        return Objects.equals(id, task.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

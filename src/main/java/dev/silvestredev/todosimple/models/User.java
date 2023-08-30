@@ -2,6 +2,7 @@ package dev.silvestredev.todosimple.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -81,4 +82,19 @@ public class User {
         this.tasks = tasks;
     }
 
+    //hash and equals
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        
+        User user = (User) o;
+        return Objects.equals(id, user.id) &&
+               Objects.equals(password, user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, password);
+    }
 }
