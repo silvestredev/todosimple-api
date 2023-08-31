@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -38,8 +39,8 @@ public class User {
 
     @JsonProperty(access = Access.WRITE_ONLY) //não retornar a senha
     @Column(length = 30, nullable = false) //tamanho max = 30, não aceita nulo, é único
-    @NotBlank(groups = CreateUser.class) //não pode ser nulo e vazio
-    @Size(groups = CreateUser.class, min = 6, max = 30)
+    @NotBlank(groups = {CreateUser.class, UpdateUser.class}) //não pode ser nulo e vazio
+    @Size(groups = {CreateUser.class, UpdateUser.class}, min = 6, max = 30)
     private String password;
 
     @OneToMany(mappedBy = "user") //um usuário pode ter várias tasks || mapeado pelo nome da váriavel presente no model Task
@@ -64,6 +65,7 @@ public class User {
     public String getName(){
         return this.name;
     }
+    
     public void setName(String name) {
         this.name = name;
     }
@@ -71,13 +73,16 @@ public class User {
     public String getPassword(){
         return this.password;
     }
+
     public void setPassword(String password){
         this.password = password;
     }
 
+    @JsonIgnore
     public List<Task> getTasks(){
         return this.tasks;
     } 
+
     public void setTasks (List<Task> tasks){
         this.tasks = tasks;
     }

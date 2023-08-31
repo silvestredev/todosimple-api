@@ -33,6 +33,12 @@ public class UserService {
     @Transactional //sempre que o método for uma transação única (ou dá certo ou é tudo revertido), usar essa annotation para otimização
     public User createUser(User user) {
         
+        var userExist = userRepository.findByName(user.getName());
+        
+        if (userExist != null) {
+            throw new RuntimeException("Já há um usuário cadastrado com esse username!");
+        }
+
         try {
             var userCreate = userRepository.save(user); //salvando o usuário
             taskRepository.saveAll(user.getTasks()); //salvando as tasks do usuário
@@ -60,29 +66,6 @@ public class UserService {
         catch(Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Não foi possível deletar esse usuário.");
-        }
-    }
-
-    //atualização de senha
-    @Transactional
-    public void updatePassword (Long userId, String oldPassword, String newPassword) {
-        
-        var user = userRepository.findById(userId).orElseThrow(
-            () -> new RuntimeException("Este usuário (" + userId + ") não existe!")
-        );
-
-        var oldPassValidation = user.getPassword();
-        if (!oldPassword.equals(oldPassValidation)){
-            throw new RuntimeException("Senha atual incorreta!");
-        }
-
-        try {
-            user.setPassword(newPassword);
-            userRepository.save(user);
-        } 
-        catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Não foi possível atualizar a senha, tente novamente mais tarde.");
         }
     }
 }
