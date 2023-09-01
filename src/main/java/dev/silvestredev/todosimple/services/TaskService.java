@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import dev.silvestredev.todosimple.models.Task;
+import dev.silvestredev.todosimple.models.User;
 import dev.silvestredev.todosimple.repositories.TaskRepository;
 import dev.silvestredev.todosimple.repositories.UserRepository;
 import jakarta.transaction.Transactional;

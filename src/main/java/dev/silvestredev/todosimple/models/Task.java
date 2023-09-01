@@ -17,7 +17,7 @@ import jakarta.validation.constraints.Size;
 @Table(name = Task.TASK_NAME)
 public class Task {
 
-    private interface CreateTask {}
+    public interface CreateTask {}
 
     public static final String TASK_NAME = "task";
 
