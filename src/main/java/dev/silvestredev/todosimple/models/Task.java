@@ -1,6 +1,5 @@
 package dev.silvestredev.todosimple.models;
 
-import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,12 +11,22 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = Task.TASK_NAME)
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode
 public class Task {
 
-    public interface CreateTask {}
+    public interface CreateTask {} //validação
 
     public static final String TASK_NAME = "task";
 
@@ -39,50 +48,4 @@ public class Task {
     @Size(groups = CreateTask.class, min = 1, max = 500)
     private String description;
 
-    public Task () {
-
-    }
-
-    public Task (Long id, String title, String description) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-    public void setTitle(String title){
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-    public void setDescription(String description){
-        this.description = description;
-    }
-
-    public User getUser() {
-        return this.user;
-    }
-
-    //hash and equals
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        
-        Task task = (Task) o;
-        return Objects.equals(id, task.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

@@ -2,9 +2,7 @@ package dev.silvestredev.todosimple.models;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -17,9 +15,19 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = User.TABLE_NAME)
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode
 public class User {
 
     //interfaces de validação
@@ -44,62 +52,7 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user") //um usuário pode ter várias tasks || mapeado pelo nome da váriavel presente no model Task
+    @JsonProperty(access = Access.WRITE_ONLY) // apenas escrita, não retornar as tasks ao buscar usuário
     private List<Task> tasks = new ArrayList<Task>();
 
-    // constructors
-    public User() {
-
-    }
-
-    public User(Long id, String name, String password) {
-        this.id = id;
-        this.name = name;
-        this.password = password;
-    }
-
-    // getters and setters
-    public Long getId() {
-        return this.id;
-    }
-    
-    public String getName(){
-        return this.name;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword(){
-        return this.password;
-    }
-
-    public void setPassword(String password){
-        this.password = password;
-    }
-
-    @JsonIgnore
-    public List<Task> getTasks(){
-        return this.tasks;
-    } 
-
-    public void setTasks (List<Task> tasks){
-        this.tasks = tasks;
-    }
-
-    //hash and equals
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        
-        User user = (User) o;
-        return Objects.equals(id, user.id) &&
-               Objects.equals(password, user.password);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, password);
-    }
 }
