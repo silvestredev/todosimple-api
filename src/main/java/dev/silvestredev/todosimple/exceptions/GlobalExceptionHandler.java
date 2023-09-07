@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import dev.silvestredev.todosimple.services.exceptions.ObjectAlreadyExistsException;
+import dev.silvestredev.todosimple.services.exceptions.ObjectNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -90,6 +92,32 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return buildErrorResponse(exception, errorMessage, HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
+    //lança a exceção de objeto nao encontrado
+    @ExceptionHandler(ObjectNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Object> handleObjectNotFoundException (
+        ObjectNotFoundException objectNotFoundException,
+        WebRequest request) {
+
+        final String errorMessage = "Failed to find the request element";
+
+        log.error(errorMessage, objectNotFoundException);
+        return buildErrorResponse(objectNotFoundException, errorMessage, HttpStatus.NOT_FOUND, request);
+    }
+
+    //lança a exceção de usuário já existente
+    @ExceptionHandler(ObjectAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<Object> handleObjectAlreadyExistsException(
+        ObjectAlreadyExistsException objectAlreadyExistsException,
+        WebRequest request) {
+    
+        final String errorMessage = "This username is already in use.";
+
+        log.error(errorMessage, objectAlreadyExistsException);
+        return buildErrorResponse(objectAlreadyExistsException, errorMessage, HttpStatus.CONFLICT, request);
+    }
+
     //buildando o ErrorResponse
     private ResponseEntity<Object> buildErrorResponse(
         Exception exception,
@@ -105,5 +133,4 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     
         return ResponseEntity.status(httpStatus).body(errorResponse);
     }
-
 }

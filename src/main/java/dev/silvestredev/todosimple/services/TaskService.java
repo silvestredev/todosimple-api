@@ -9,6 +9,7 @@ import dev.silvestredev.todosimple.models.Task;
 import dev.silvestredev.todosimple.models.User;
 import dev.silvestredev.todosimple.repositories.TaskRepository;
 import dev.silvestredev.todosimple.repositories.UserRepository;
+import dev.silvestredev.todosimple.services.exceptions.ObjectNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -24,7 +25,7 @@ public class TaskService {
     public List<Task> getAllUserTasks(Long userId) {
 
         var user = userRepository.findById(userId).orElseThrow(
-            () -> new RuntimeException("Usuário não encontrado!")
+            () -> new ObjectNotFoundException("Usuário não encontrado!")
         );
         
         try {
@@ -39,7 +40,7 @@ public class TaskService {
     public Task getTaskById(Long taskId) {
 
         var task = taskRepository.findById(taskId).orElseThrow(
-            () -> new RuntimeException("Essa Task <" + taskId + "> não existe!")
+            () -> new ObjectNotFoundException("Essa Task <" + taskId + "> não existe!")
         );
 
         try {
@@ -68,7 +69,7 @@ public class TaskService {
     public void updateTask (Long taskId, Task newTask) {
 
         Task oldTask = taskRepository.findById(taskId).orElseThrow(
-            () -> new RuntimeException("Essa task <" + taskId + "> não existe!")
+            () -> new ObjectNotFoundException("Essa task <" + taskId + "> não existe!")
         );
 
         try {
@@ -85,7 +86,7 @@ public class TaskService {
     public void DeleteTask (Long taskId) {
 
         var task = taskRepository.findById(taskId).orElseThrow(
-            () -> new RuntimeException("Essa task <" + taskId + "> não existe!")
+            () -> new ObjectNotFoundException("Essa task <" + taskId + "> não existe!")
         );
 
         try {

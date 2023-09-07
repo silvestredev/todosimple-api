@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import dev.silvestredev.todosimple.models.User;
 import dev.silvestredev.todosimple.repositories.TaskRepository;
 import dev.silvestredev.todosimple.repositories.UserRepository;
+import dev.silvestredev.todosimple.services.exceptions.ObjectAlreadyExistsException;
+import dev.silvestredev.todosimple.services.exceptions.ObjectNotFoundException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -24,7 +26,7 @@ public class UserService {
     public User findById(Long id) {
         Optional<User> result = userRepository.findById(id);
 
-        return result.orElseThrow(() -> new RuntimeException(
+        return result.orElseThrow(() -> new ObjectNotFoundException(
             "Usuário com o id: <" + id + "> não encontrado!"
         ));
     }
@@ -36,7 +38,7 @@ public class UserService {
         var userExist = userRepository.findByName(user.getName());
         
         if (userExist != null) {
-            throw new RuntimeException("Já há um usuário cadastrado com esse username!");
+            throw new ObjectAlreadyExistsException("Já há um usuário cadastrado com esse username!");
         }
 
         try {
@@ -56,7 +58,7 @@ public class UserService {
     public void userDelete(Long userId) {
 
         var user = userRepository.findById(userId).orElseThrow(
-            () -> new RuntimeException("Este usuário (" + userId + ") não existe!")
+            () -> new ObjectNotFoundException("Este usuário (" + userId + ") não existe!")
         );
 
         try {
