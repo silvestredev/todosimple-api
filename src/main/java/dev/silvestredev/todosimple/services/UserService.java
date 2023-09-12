@@ -1,11 +1,15 @@
 package dev.silvestredev.todosimple.services;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import dev.silvestredev.todosimple.models.User;
+import dev.silvestredev.todosimple.models.enums.ProfileEnum;
 import dev.silvestredev.todosimple.repositories.TaskRepository;
 import dev.silvestredev.todosimple.repositories.UserRepository;
 import dev.silvestredev.todosimple.services.exceptions.ObjectAlreadyExistsException;
@@ -14,6 +18,9 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class UserService {
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder; //bean presente na classe SecurityConfig
 
     @Autowired
     private UserRepository userRepository;
@@ -42,6 +49,11 @@ public class UserService {
         }
 
         try {
+
+            user.setProfiles(Stream.of(ProfileEnum.USER.getCode()).collect(Collectors.toSet())); //definindo perfil de usuário
+
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));// criptogrfando senha
+
             var userCreate = userRepository.save(user); //salvando o usuário
             taskRepository.saveAll(user.getTasks()); //salvando as tasks do usuário
 
