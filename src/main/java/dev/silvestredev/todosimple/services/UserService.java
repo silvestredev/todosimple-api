@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import dev.silvestredev.todosimple.exceptions.GlobalExceptionHandler;
 import dev.silvestredev.todosimple.models.User;
 import dev.silvestredev.todosimple.models.enums.ProfileEnum;
 import dev.silvestredev.todosimple.repositories.TaskRepository;
@@ -49,19 +50,19 @@ public class UserService {
         }
 
         try {
-
+            
             user.setProfiles(Stream.of(ProfileEnum.USER.getCode()).collect(Collectors.toSet())); //definindo perfil de usuário
-
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));// criptogrfando senha
 
             var userCreate = userRepository.save(user); //salvando o usuário
             taskRepository.saveAll(user.getTasks()); //salvando as tasks do usuário
 
             return userCreate;
-        } 
+        }
         catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Não foi possível criar esse usuário, tente novamente mais tarde.");
+
+            throw new RuntimeException();
         }
     }
 

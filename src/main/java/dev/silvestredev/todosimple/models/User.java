@@ -53,9 +53,9 @@ public class User {
     private String name;
 
     @JsonProperty(access = Access.WRITE_ONLY) //não retornar a senha
-    @Column(length = 30, nullable = false) //tamanho max = 30, não aceita nulo, é único
+    @Column(nullable = false) //tamanho max = 30, não aceita nulo, é único
     @NotBlank(groups = {CreateUser.class, UpdateUser.class}) //não pode ser nulo e vazio
-    @Size(groups = {CreateUser.class, UpdateUser.class}, min = 6, max = 30)
+    @Size(groups = {CreateUser.class, UpdateUser.class}, min = 6)
     private String password;
 
     @OneToMany(mappedBy = "user") //um usuário pode ter várias tasks || mapeado pelo nome da váriavel presente no model Task
